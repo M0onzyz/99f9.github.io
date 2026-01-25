@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matcha GUI Builder</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Toolbox -->
+        <div class="sidebar">
+            <div class="logo">Matcha<span>Builder</span></div>
+            <a href="privacy.html" target="_blank" style="font-size: 0.7em; color: #666; text-decoration: none; padding-left: 20px; display: block; margin-top: -15px; margin-bottom: 15px;">Privacy Policy</a>
+            <div class="toolbox">
+                <h3>Tools</h3>
+                <button id="add-square" class="tool-btn">
+                    <img src="icons/square.png" class="tool-icon" alt="Square"> Square
+                </button>
+                <button id="add-text" class="tool-btn">
+                    <img src="icons/text.png" class="tool-icon" alt="Text"> Text
+                </button>
+                <button id="add-circle" class="tool-btn">
+                    <img src="icons/circle.png" class="tool-icon" alt="Circle"> Circle
+                </button>
+                <button id="add-button" class="tool-btn">
+                    <img src="icons/button.png" class="tool-icon" alt="Button"> Button
+                </button>
+                <button id="add-image" class="tool-btn">
+                    <img src="icons/image.png" class="tool-icon" alt="Image"> Image
+                </button>
+                <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                <button id="add-checkbox" class="tool-btn">
+                    <img src="icons/checkbox.png" class="tool-icon" alt="Checkbox"> Checkbox
+                </button>
+                <button id="add-slider" class="tool-btn">
+                    <img src="icons/slider.png" class="tool-icon" alt="Slider"> Slider
+                </button>
+                <button id="add-dropdown" class="tool-btn">
+                    <img src="icons/dropdown.png" class="tool-icon" alt="Dropdown"> Dropdown
+                </button>
+                <button id="add-keybind" class="tool-btn">
+                    <img src="icons/keybind.png" class="tool-icon" alt="Keybind"> Keybind
+                </button>
+            </div>
+            
+            <div class="layer-list">
+                <h3>Layers</h3>
+                <div id="layers-container">
+                    <!-- Layers will be added here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Workspace -->
+        <div class="workspace">
+            <div class="toolbar-top">
+                <div class="canvas-controls">
+                    <span class="label">Zoom</span>
+                    <button id="zoom-out" class="action-btn">-</button>
+                    <span id="zoom-level">100%</span>
+                    <button id="zoom-in" class="action-btn">+</button>
+                </div>
+                <div class="actions">
+                    <button id="import-config" class="action-btn">Import</button>
+                    <button id="export-config" class="action-btn">Export</button>
+                    <input type="file" id="config-upload" accept=".json" style="display: none;">
+                    <button id="copy-code" class="action-btn primary">Copy Code</button>
+                    <button id="show-shortcuts" class="action-btn" title="Keyboard Shortcuts" style="margin-left: 10px;">
+                        <img src="icons/keybind.png" class="tool-icon" alt="Keyboard Shortcuts" style=" width: 16px; height: 16px;">
+                    </button>
+                    <button id="clear-project" class="action-btn" title="Clear Project" style="margin-left: 5x; background-color: #d32f2f; color: white;">
+                        <img src="icons/bin.png" class="tool-icon" alt="Clear" style="filter: brightness(0) invert(1); width: 16px; height: 16px;">
+                    </button>
+                </div>
+            </div>
+            <div class="canvas-wrapper">
+                <div id="canvas-container" style="transform-origin: top left;">
+                    <div id="canvas" class="canvas">
+                        <!-- GUI Elements will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Properties & Code Panel -->
+        <div class="inspector">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="properties">Properties</button>
+                <button class="tab-btn" data-tab="code">Code</button>
+            </div>
+            
+            <div id="properties-panel" class="panel-content active">
+                <div class="no-selection">Select an object to edit properties</div>
+                <div id="properties-form" class="properties-form" style="display: none;">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="prop-name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Visible</label>
+                        <input type="checkbox" id="prop-visible">
+                    </div>
+
+                    <div class="form-group">
+                        <label>ZIndex</label>
+                        <input type="number" id="prop-zindex" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Position</label>
+                        <div class="vec2-input">
+                            <input type="number" id="prop-pos-x" placeholder="X">
+                            <input type="number" id="prop-pos-y" placeholder="Y">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Color</label>
+                        <div class="color-input-wrapper">
+                            <input type="color" id="prop-color">
+                            <input type="text" id="prop-color-hex" placeholder="#FFFFFF">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Transparency</label>
+                        <input type="range" id="prop-transparency" min="0" max="1" step="0.05">
+                        <span id="val-transparency">1</span>
+                    </div>
+
+                    <!-- Type Specific Properties -->
+                    <div id="specific-properties"></div>
+                </div>
+            </div>
+
+            <div id="code-panel" class="panel-content">
+                <pre><code id="generated-code" class="language-lua">-- Generated Code will appear here</code></pre>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Shortcuts Modal -->
+    <div id="shortcuts-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Keyboard Shortcuts</h2>
+                <button id="close-shortcuts" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="shortcut-group">
+                    <h3>General</h3>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Delete Object</span>
+                        <div class="keys"><span class="key">Del</span> <span class="or">or</span> <span class="key">Backspace</span></div>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Copy</span>
+                        <div class="keys"><span class="key">Ctrl</span> + <span class="key">C</span></div>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Paste</span>
+                        <div class="keys"><span class="key">Ctrl</span> + <span class="key">V</span></div>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Cut</span>
+                        <div class="keys"><span class="key">Ctrl</span> + <span class="key">X</span></div>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Undo</span>
+                        <div class="keys"><span class="key">Ctrl</span> + <span class="key">Z</span></div>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Redo</span>
+                        <div class="keys"><span class="key">Ctrl</span> + <span class="key">Y</span></div>
+                    </div>
+                </div>
+                
+                <div class="shortcut-group">
+                    <h3>Canvas</h3>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Nudge Object</span>
+                        <div class="keys"><span class="key">Arrow Keys</span></div>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Fast Nudge</span>
+                        <div class="keys"><span class="key">Shift</span> + <span class="key">Arrow Keys</span></div>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Zoom In</span>
+                        <div class="keys"><span class="key">+</span></div>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Zoom Out</span>
+                        <div class="keys"><span class="key">-</span></div>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Reset Zoom</span>
+                        <div class="keys"><span class="key">0</span></div>
+                    </div>
+                </div>
+
+                <div class="shortcut-group">
+                    <h3>Interaction</h3>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Maintain Aspect Ratio</span>
+                        <div class="keys"><span class="key">Shift</span> + <span class="mouse">Resize</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
