@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matcha GUI Builder</title>
+    
+    <meta name="description" content="A powerful GUI Builder for Matcha. Create, customize, and export GUI configurations effortlessly with our intuitive drag-and-drop interface.">
+    <meta name="keywords" content="Matcha, GUI Builder, UI Designer, Lua Config, Interface Tool, Drag and Drop, Code Generation">
+    <meta name="author" content="99f9">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 </head>
@@ -33,6 +37,9 @@
                 <input type="file" id="image-upload" accept="image/*" style="display: none;">
                 <button id="add-checkbox" class="tool-btn">
                     <img src="icons/checkbox.png" class="tool-icon" alt="Checkbox"> Checkbox
+                </button>
+                <button id="add-switch" class="tool-btn">
+                    <img src="icons/checkbox.png" class="tool-icon" alt="Switch"> Switch
                 </button>
                 <button id="add-slider" class="tool-btn">
                     <img src="icons/slider.png" class="tool-icon" alt="Slider"> Slider
@@ -66,6 +73,7 @@
                     <button id="import-config" class="action-btn">Import</button>
                     <button id="export-config" class="action-btn">Export</button>
                     <input type="file" id="config-upload" accept=".json" style="display: none;">
+
                     <button id="copy-code" class="action-btn primary">Copy Code</button>
                     <button id="show-shortcuts" class="action-btn" title="Keyboard Shortcuts" style="margin-left: 10px;">
                         <img src="icons/keybind.png" class="tool-icon" alt="Keyboard Shortcuts" style=" width: 16px; height: 16px;">
@@ -176,6 +184,10 @@
                         <span class="key-desc">Redo</span>
                         <div class="keys"><span class="key">Ctrl</span> + <span class="key">Y</span></div>
                     </div>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Duplicate</span>
+                        <div class="keys"><span class="key">Ctrl</span> + <span class="key">D</span></div>
+                    </div>
                 </div>
                 
                 <div class="shortcut-group">
@@ -207,6 +219,14 @@
                     <div class="shortcut-item">
                         <span class="key-desc">Maintain Aspect Ratio</span>
                         <div class="keys"><span class="key">Shift</span> + <span class="mouse">Resize</span></div>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Multi-select</span>
+                        <div class="keys"><span class="key">Ctrl</span> + <span class="mouse">Click</span></div>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="key-desc">Disable Snapping</span>
+                        <div class="keys"><span class="key">Alt</span> + <span class="mouse">Drag</span></div>
                     </div>
                 </div>
             </div>

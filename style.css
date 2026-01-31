@@ -1,42 +1,63 @@
 @font-face {
     font-family: 'ProggyClean';
     src: url('fonts/proggyclean/ProggyClean.ttf');
+    font-display: swap;
 }
 @font-face {
     font-family: 'San Francisco';
     src: url('fonts/sanfrancisco/SFNSText-Regular.otf');
+    font-display: swap;
 }
 @font-face {
     font-family: 'SF Bold';
     src: url('fonts/sfbold/SFNSText-Bold.otf');
+    font-display: swap;
 }
 @font-face {
     font-family: 'Minecraft';
     src: url('fonts/minecraft/MinecraftRegular.otf');
+    font-display: swap;
 }
 @font-face {
     font-family: 'JetBrains';
     src: url('fonts/jetbrains/JetbrainsMonoRegular.ttf');
+    font-display: swap;
 }
 @font-face {
     font-family: 'Pixel';
     src: url('fonts/pixel/pixel.ttf');
+    font-display: swap;
 }
 @font-face {
     font-family: 'Fortnite';
     src: url('fonts/fortnite/fortnite.otf');
+    font-display: swap;
 }
 
 :root {
+    /* Colors */
     --bg-dark: #121212;
     --bg-panel: #1e1e1e;
     --bg-canvas: #2d2d2d;
     --border: #333;
-    --primary: #4CAF50; /* Matcha green? */
+    --primary: #4CAF50;
     --text-main: #e0e0e0;
     --text-dim: #a0a0a0;
     --input-bg: #2a2a2a;
     --accent: #007acc;
+    --error: #ff6b6b;
+    --warning: #ffd700;
+    
+    /* Dimensions & Spacing */
+    --radius: 4px;
+    --spacing-xs: 5px;
+    --spacing-sm: 10px;
+    --spacing-md: 15px;
+    --spacing-lg: 20px;
+    
+    /* Typography */
+    --font-sans: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
 }
 
 * {
@@ -46,7 +67,7 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-sans);
     background-color: var(--bg-dark);
     color: var(--text-main);
     height: 100vh;
@@ -59,17 +80,77 @@ body {
     height: 100vh;
 }
 
-/* Sidebar */
-.sidebar {
+/* --- Layout Components --- */
+
+.sidebar, 
+.inspector {
     background-color: var(--bg-panel);
-    border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    contain: content; /* Performance: Isolate layout */
 }
 
+.sidebar {
+    border-right: 1px solid var(--border);
+}
+
+.inspector {
+    border-left: 1px solid var(--border);
+}
+
+.workspace {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-dark);
+    contain: strict;
+}
+
+/* --- Shared Components --- */
+
+/* Scrollbars */
+.layer-list::-webkit-scrollbar,
+.panel-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.layer-list::-webkit-scrollbar-track,
+.panel-content::-webkit-scrollbar-track {
+    background: var(--bg-panel);
+}
+
+.layer-list::-webkit-scrollbar-thumb,
+.panel-content::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: var(--radius);
+}
+
+.layer-list::-webkit-scrollbar-thumb:hover,
+.panel-content::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+
+/* Headers */
+.toolbox h3, 
+.layer-list h3,
+.shortcut-group h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: 0.5px;
+}
+
+.shortcut-group h3 {
+    color: var(--primary);
+    border-bottom: 1px solid #333;
+    padding-bottom: 5px;
+}
+
+/* --- Sidebar Content --- */
+
 .logo {
-    padding: 15px;
+    padding: var(--spacing-md);
     font-weight: 600;
     font-size: 1.2rem;
     border-bottom: 1px solid var(--border);
@@ -81,16 +162,8 @@ body {
 }
 
 .toolbox {
-    padding: 15px;
+    padding: var(--spacing-md);
     border-bottom: 1px solid var(--border);
-}
-
-.toolbox h3, .layer-list h3 {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 10px;
-    letter-spacing: 0.5px;
 }
 
 .tool-btn {
@@ -98,13 +171,13 @@ body {
     align-items: center;
     width: 100%;
     padding: 8px 12px;
-    margin-bottom: 5px;
+    margin-bottom: var(--spacing-xs);
     background: transparent;
     border: 1px solid var(--border);
     color: var(--text-main);
-    border-radius: 4px;
+    border-radius: var(--radius);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: background 0.2s, border-color 0.2s;
     font-size: 0.9rem;
 }
 
@@ -113,49 +186,28 @@ body {
     border-color: var(--text-dim);
 }
 
-.tool-btn .icon {
-    margin-right: 10px;
-}
-
 .tool-btn .tool-icon {
-    margin-right: 10px;
+    margin-right: var(--spacing-sm);
     width: 20px;
     height: 20px;
     object-fit: contain;
-    /* Invert colors for dark mode if icons are black */
     filter: invert(0.8);
 }
 
 .layer-list {
     flex: 1;
     overflow-y: auto;
-    padding: 15px;
+    padding: var(--spacing-md);
     min-height: 0;
-}
-
-/* Custom Scrollbar for Layers */
-.layer-list::-webkit-scrollbar {
-    width: 8px;
-}
-
-.layer-list::-webkit-scrollbar-track {
-    background: var(--bg-panel);
-}
-
-.layer-list::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 4px;
-}
-
-.layer-list::-webkit-scrollbar-thumb:hover {
-    background: #444;
+    content-visibility: auto; /* Skip rendering off-screen items */
+    contain-intrinsic-size: 1px 500px; /* Estimate size to prevent scrollbar jumping */
 }
 
 .layer-item {
     padding: 8px 10px;
     background: var(--input-bg);
     margin-bottom: 4px;
-    border-radius: 4px;
+    border-radius: var(--radius);
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -172,59 +224,47 @@ body {
     color: white;
 }
 
+.layer-item .delete-btn,
+.layer-item .view-btn,
+.layer-item .lock-btn {
+    transition: opacity 0.2s;
+}
+
 .layer-item .delete-btn {
     opacity: 0;
-    color: #ff6b6b;
+    color: var(--error);
     cursor: pointer;
     font-weight: bold;
 }
 
-.layer-item:hover .delete-btn {
-    opacity: 1;
-}
+.layer-item:hover .delete-btn { opacity: 1; }
 
-.layer-item .view-btn {
+.layer-item .view-btn,
+.layer-item .lock-btn {
     opacity: 0.3;
-    transition: opacity 0.2s;
 }
 
-.layer-item:hover .view-btn {
+.layer-item:hover .view-btn,
+.layer-item:hover .lock-btn {
     opacity: 0.7;
 }
 
-.layer-item .view-btn:hover {
+.layer-item .view-btn:hover,
+.layer-item .lock-btn:hover {
     opacity: 1;
 }
 
 .layer-item .view-btn.hidden {
     opacity: 1;
-    color: #ff6b6b;
-}
-
-.layer-item .lock-btn {
-    opacity: 0.3;
-    transition: opacity 0.2s;
-}
-
-.layer-item:hover .lock-btn {
-    opacity: 0.7;
-}
-
-.layer-item .lock-btn:hover {
-    opacity: 1;
+    color: var(--error);
 }
 
 .layer-item .lock-btn.locked {
     opacity: 1;
-    color: #ffd700;
+    color: var(--warning);
 }
 
-/* Workspace */
-.workspace {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--bg-dark);
-}
+/* --- Workspace Content --- */
 
 .toolbar-top {
     height: 50px;
@@ -233,12 +273,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
+    padding: 0 var(--spacing-lg);
 }
 
 .action-btn {
     padding: 6px 12px;
-    border-radius: 4px;
+    border-radius: var(--radius);
     border: none;
     cursor: pointer;
     font-weight: 500;
@@ -253,40 +293,41 @@ body {
     flex: 1;
     overflow: auto;
     display: flex;
-    /* justify-content: center; Removed to allow safe scrolling */
-    /* align-items: center; Removed to allow safe scrolling */
     background-image: radial-gradient(#333 1px, transparent 1px);
     background-size: 20px 20px;
 }
 
 #canvas-container {
-    margin: auto; /* Centers the canvas when smaller than viewport */
-    flex-shrink: 0; /* Prevents shrinking */
+    margin: auto;
+    flex-shrink: 0;
 }
 
 .canvas {
     width: 800px;
     height: 600px;
-    background-color: transparent; /* Drawing lib usually overlays, but we simulate a screen */
+    background-color: transparent;
     border: 1px solid #444;
     position: relative;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    overflow: hidden; /* Objects can be outside, but usually we clip */
+    overflow: hidden;
+    touch-action: none; /* Prevent browser handling of gestures on canvas */
 }
 
-/* Drawing Objects Simulation */
 .drawing-obj {
     position: absolute;
-    box-sizing: border-box; /* IMPORTANT */
+    box-sizing: border-box;
     user-select: none;
     cursor: move;
+    /* Performance hint for moving objects */
+    /* Note: if objects are resized often, width/height should also be added */
+    will-change: top, left, width, height; 
+    touch-action: none; /* Prevent scrolling while dragging on touch devices */
 }
 
 .drawing-obj.selected {
     outline: 2px dashed var(--accent);
 }
 
-/* Resize Handle */
 .resize-handle {
     width: 10px;
     height: 10px;
@@ -305,14 +346,7 @@ body {
     display: block;
 }
 
-/* Inspector */
-.inspector {
-    background-color: var(--bg-panel);
-    border-left: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden; /* Ensure flex child scrolling works */
-}
+/* --- Inspector Content --- */
 
 .tabs {
     display: flex;
@@ -338,35 +372,18 @@ body {
     display: none;
     flex: 1;
     overflow-y: auto;
-    padding: 15px;
+    padding: var(--spacing-md);
     min-height: 0;
-}
-
-/* Custom Scrollbar for Panels */
-.panel-content::-webkit-scrollbar {
-    width: 8px;
-}
-
-.panel-content::-webkit-scrollbar-track {
-    background: var(--bg-panel);
-}
-
-.panel-content::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 4px;
-}
-
-.panel-content::-webkit-scrollbar-thumb:hover {
-    background: #444;
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 500px;
 }
 
 .panel-content.active {
     display: block;
 }
 
-/* Form Styles */
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: var(--spacing-md);
 }
 
 .form-group label {
@@ -383,7 +400,7 @@ select {
     padding: 6px 10px;
     background: var(--input-bg);
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: var(--radius);
     color: var(--text-main);
     font-family: inherit;
 }
@@ -394,13 +411,13 @@ input[type="checkbox"] {
 
 .vec2-input {
     display: flex;
-    gap: 10px;
+    gap: var(--spacing-sm);
 }
 
 .color-input-wrapper {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--spacing-sm);
 }
 
 input[type="color"] {
@@ -418,15 +435,16 @@ input[type="color"] {
 
 #generated-code {
     display: block;
-    padding: 15px;
-    font-family: 'JetBrains Mono', monospace;
+    padding: var(--spacing-md);
+    font-family: var(--font-mono);
     font-size: 0.85rem;
     white-space: pre-wrap;
     color: #d4d4d4;
     line-height: 1.5;
 }
 
-/* Shortcuts Modal */
+/* --- Modals --- */
+
 .modal-overlay {
     display: none;
     position: fixed;
@@ -440,6 +458,7 @@ input[type="color"] {
     align-items: center;
     opacity: 0;
     transition: opacity 0.3s ease;
+    will-change: opacity;
 }
 
 .modal-overlay.open {
@@ -456,6 +475,7 @@ input[type="color"] {
     border: 1px solid #3e3e42;
     transform: translateY(-20px);
     transition: transform 0.3s ease;
+    will-change: transform;
 }
 
 .modal-overlay.open .modal-content {
@@ -463,7 +483,7 @@ input[type="color"] {
 }
 
 .modal-header {
-    padding: 20px;
+    padding: var(--spacing-lg);
     border-bottom: 1px solid #3e3e42;
     display: flex;
     justify-content: space-between;
@@ -490,23 +510,13 @@ input[type="color"] {
 }
 
 .modal-body {
-    padding: 20px;
+    padding: var(--spacing-lg);
     max-height: 70vh;
     overflow-y: auto;
 }
 
 .shortcut-group {
     margin-bottom: 25px;
-}
-
-.shortcut-group h3 {
-    color: var(--primary);
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 5px;
 }
 
 .shortcut-item {
@@ -537,20 +547,20 @@ input[type="color"] {
 .key {
     background-color: #333;
     border: 1px solid #444;
-    border-radius: 4px;
+    border-radius: var(--radius);
     padding: 2px 8px;
     color: #fff;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     box-shadow: 0 2px 0 #1a1a1a;
 }
 
 .mouse {
     background-color: #333;
     border: 1px solid #444;
-    border-radius: 4px;
+    border-radius: var(--radius);
     padding: 2px 8px;
     color: #fff;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-sans);
 }
 
 .or {
